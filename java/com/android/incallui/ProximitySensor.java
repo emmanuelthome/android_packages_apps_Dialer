@@ -96,7 +96,7 @@ public class ProximitySensor
   @Override
   public void orientationChanged(int orientation) {
     this.orientation = orientation;
-    updateProximitySensorMode();
+    turnOffProximitySensor(true);
   }
 
   /** Called to keep track of the overall UI state. */
@@ -125,18 +125,18 @@ public class ProximitySensor
       orientation = AccelerometerListener.ORIENTATION_UNKNOWN;
       accelerometerListener.enable(isPhoneOffhook);
 
-      updateProximitySensorMode();
+      turnOffProximitySensor(true);
     }
   }
 
   @Override
   public void onAudioStateChanged(CallAudioState audioState) {
-    updateProximitySensorMode();
+    turnOffProximitySensor(true);
   }
 
   public void onDialpadVisible(boolean visible) {
     dialpadVisible = visible;
-    updateProximitySensorMode();
+    turnOffProximitySensor(true);
   }
 
   public void setIsAttemptingVideoCall(boolean isAttemptingVideoCall) {
@@ -145,7 +145,7 @@ public class ProximitySensor
         "isAttemptingVideoCall: %b",
         isAttemptingVideoCall);
     this.isAttemptingVideoCall = isAttemptingVideoCall;
-    updateProximitySensorMode();
+    turnOffProximitySensor(true);
   }
   /** Used to save when the UI goes in and out of the foreground. */
   public void onInCallShowing(boolean showing) {
@@ -157,7 +157,7 @@ public class ProximitySensor
     } else if (powerManager.isScreenOn()) {
       uiShowing = false;
     }
-    updateProximitySensorMode();
+    turnOffProximitySensor(true);
   }
 
   void onDisplayStateChanged(boolean isDisplayOn) {
@@ -252,12 +252,12 @@ public class ProximitySensor
       LogUtil.v("ProximitySensor.updateProximitySensorMode", "turning on proximity sensor");
       // Phone is in use!  Arrange for the screen to turn off
       // automatically when the sensor detects a close object.
-      turnOnProximitySensor();
+      turnOffProximitySensor(true);
     } else {
       LogUtil.v("ProximitySensor.updateProximitySensorMode", "turning off proximity sensor");
       // Phone is either idle, or ringing.  We don't want any special proximity sensor
       // behavior in either case.
-      turnOffProximitySensor(screenOnImmediately);
+      turnOffProximitySensor(true);
     }
     Trace.endSection();
   }
